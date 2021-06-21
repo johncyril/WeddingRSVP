@@ -1,0 +1,46 @@
+﻿@page "/inviteadmin"
+
+@using WeddingRsvp.Data
+@inject InviteManagementService InviteManagementService
+
+<h1>Invites</h1>
+
+<p>All your Wedding invites are below.</p>
+
+@if (invites == null)
+{
+    <p><em>No Invites yet...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Party Name</th>
+                <th>Number of people in party</th>
+                <th>RSVP status</th>
+                <th>Invite Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invite in invites)
+            {
+            <tr>
+                <td>@invite.PartyName</td>
+                <td>@invite.NumberOfPeople</td>
+                <td>@invite.RsvpStatus</td>
+                <td>@invite.InviteCode</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private InviteAdminViewModel[] invites;
+
+    protected override async Task OnInitializedAsync()
+    {
+        invites = await InviteManagementService.GetInvites();
+    }
+}

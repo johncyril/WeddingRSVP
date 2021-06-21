@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using WeddingRsvp.Api.Data;
 using WeddingRsvp.Api.Exceptions;
 using WeddingRsvp.Api.Extensions;
-using WeddingRsvp.Api.Protos;
+using WeddingRsvp.Protos;
 using WeddingRsvp.Api.Utilities;
-using Invite = WeddingRsvp.Api.Protos.Invite;
+using Invite = WeddingRsvp.Protos.Invite;
 
 namespace WeddingRsvp.Api.Services
 {

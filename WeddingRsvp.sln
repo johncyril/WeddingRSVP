@@ -9,7 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeddingRsvp.Api", "WeddingR
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protos", "Protos", "{5DF73749-DE79-4E5A-B816-C40D7F8FEA71}"
 	ProjectSection(SolutionItems) = preProject
-		WeddingRsvp.Api\Protos\greet.proto = WeddingRsvp.Api\Protos\greet.proto
 		WeddingRsvp.Api\Protos\invite.proto = WeddingRsvp.Api\Protos\invite.proto
 	EndProjectSection
 EndProject

@@ -20,4 +20,14 @@
     <PackageReference Include="MongoDbGenericRepository" Version="1.4.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Protobuf Include="..\Protos\invite.proto" GrpcServices="Server">
+      <Link>Protos\invite.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>
+
 </Project>
