@@ -2,20 +2,18 @@ using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WeddingRsvp.Extensions;
+using WeddingRsvp.Protos;
 
 namespace WeddingRsvp.Data
 {
     public class InviteManagementService
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        public Task<Invite[]> GetInvites()
+        public async Task<InviteAdminViewModel[]> GetInvites()
         {
             var handler = new GrpcWebHandler(GrpcWebMode.GrpcWebText, new HttpClientHandler());
             var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
@@ -23,14 +21,17 @@ namespace WeddingRsvp.Data
                 HttpClient = new HttpClient(handler)
             });
 
-            var client = new Inviter.InviterClient()
-            var rng = new Random();
-            return Task.FromResult(Enumerable.Range(1, 5).Select(index => new InviteAdminDto
+            var invites = new BlockingCollection<InviteAdminViewModel>();
+
+            var client = new Inviter.InviterClient(channel);
+            using var stream = client.GetAllInvites(new GetAllInvitesRequest());
+
+            await foreach (var response in stream.ResponseStream.ReadAllAsync())
             {
-                Date = startDate.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            }).ToArray());
+                invites.Add(response.ToInviteAdminViewModel());
+            }
+
+            return invites.ToArray();
         }
     }
 }

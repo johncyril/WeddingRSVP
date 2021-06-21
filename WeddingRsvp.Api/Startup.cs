@@ -26,7 +26,7 @@ namespace WeddingRsvp.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc(;
+            services.AddGrpc();
             services.AddGrpcReflection();
             services.AddScoped<IMongoDbRepository>(m => new MongoDbRepository(Configuration.GetConnectionString("MongoDb")));
         }
@@ -44,7 +44,6 @@ namespace WeddingRsvp.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
                 endpoints.MapGrpcService<InviterService>().EnableGrpcWeb();
                 if (env.IsDevelopment())
                 {
