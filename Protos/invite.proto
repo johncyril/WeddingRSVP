@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+option csharp_namespace = "WeddingRsvp.Api.Protos";
+
+import "google/protobuf/timestamp.proto";
+
+service Inviter {
+  // Adds an Invite
+  rpc AddInvite (AddInviteRequest) returns (Invite);
+
+  // Updates an Invite
+  rpc UpdateInvite (UpdateInviteRequest) returns (Invite);
+
+  // Get all invites
+  rpc GetAllInvites (GetAllInvitesRequest) returns (stream Invite);
+
+  // Get invites based on party name and code
+  rpc GetInviteByCode (GetInviteByCodeRequest) returns (Invite);
+}
+
+// request mesage for adding an invite
+message AddInviteRequest{
+	string partyName = 1;
+	int32 numberOfPeople = 2;
+	repeated Person people = 3;
+	string email = 4;
+}
+
+// request for updating an invite
+message UpdateInviteRequest{
+	string inviteId = 1;
+	string partyName = 2;
+	int32 numberOfPeople = 3;
+	repeated Person People = 4;
+	RsvpStatus rsvpStatus = 5;
+	string inviteCode =6;
+	string email = 7;
+}
+
+// request for getting all invites
+message GetAllInvitesRequest{
+	
+}
+
+// request for getting an invite by party name and invite code
+message GetInviteByCodeRequest{
+	string partyName = 1;
+	string inviteCode = 2;	
+}
+
+// The Invite
+message Invite{
+	string id = 1;
+	string partyName = 2;
+	int32 numberOfPeople = 3;
+	string inviteCode = 4;
+	repeated Person people = 5;
+	RsvpStatus rsvpStatus = 6;
+	string email = 7;
+	google.protobuf.Timestamp createdAt = 8;
+	google.protobuf.Timestamp updatedAt = 9;
+}
+
+enum RsvpStatus{
+	RSVP_STATUS_UNKNOWN = 0;
+	RSVP_STATUS_ACCEPTED = 1;
+	RSVP_STATUS_DECLINED = 2;
+}
+
+
+message Person{
+	int32 Id = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	DietaryRequirements DietaryRequirements = 4;
+}
+
+enum DietaryRequirements{
+	DIETARY_REQUIREMENTS_NONE = 0;
+	DIETARY_REQUIREMENTS_GLUTEN_FREE = 1;
+	DIETARY_REQUIREMENTS_VEGETARIAN = 2;
+	DIETARY_REQUIREMENTS_VEGAN = 3;
+	DIETARY_REQUIREMENTS_OTHER = 4;
+}
