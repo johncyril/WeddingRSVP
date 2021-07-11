@@ -25,22 +25,48 @@ else
         <tbody>
             @foreach (var invite in invites)
             {
-            <tr>
-                <td>@invite.PartyName</td>
-                <td>@invite.NumberOfPeople</td>
-                <td>@invite.RsvpStatus</td>
-                <td>@invite.InviteCode</td>
-            </tr>
+                <tr>
+                    <td>@invite.PartyName</td>
+                    <td>@invite.NumberOfPeople</td>
+                    <td>@invite.RsvpStatus</td>
+                    <td>@invite.InviteCode</td>
+                    <td @onclick="@(e => ShowModal(invite))">Edit</td>
+                </tr>
             }
         </tbody>
     </table>
+    <button @onclick="@(e => ShowModal(new InviteViewModel()
+                        {
+                            People = new List<PersonViewModel>()
+                        }))">Add an Invite</button>
 }
 
 @code {
-    private InviteAdminViewModel[] invites;
+
+    [CascadingParameter] public IModalService Modal { get; set; }
+
+    private InviteViewModel[] invites;
 
     protected override async Task OnInitializedAsync()
     {
         invites = await InviteManagementService.GetInvites();
     }
+
+    void ShowModal(InviteViewModel invite)
+    {
+        var parameters = new ModalParameters();
+
+        if (invite != null)
+        {
+            parameters.Add("Invite", invite);
+
+            Modal.Show<EditInviteModal>("", parameters); ;
+        }
+        else
+        {
+            Modal.Show<EditInviteModal>("", (ModalParameters)null); 
+        }
+    }
+
+
 }

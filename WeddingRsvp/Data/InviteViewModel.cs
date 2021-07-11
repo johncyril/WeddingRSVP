@@ -4,7 +4,7 @@ using WeddingRsvp.Protos;
 
 namespace WeddingRsvp.Data
 {
-    public class InviteAdminViewModel
+    public class InviteViewModel
     {
         public string Id { get; set; }
 
@@ -14,10 +14,7 @@ namespace WeddingRsvp.Data
 
         public string InviteCode { get; set; }
 
-        /// <summary>
-        /// todo - abstract this
-        /// </summary>
-        public IEnumerable<Person> People { get; set; }
+        public List<PersonViewModel> People { get; set; }
 
         public RsvpStatus RsvpStatus { get; set; }
 
