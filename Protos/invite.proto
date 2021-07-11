@@ -73,6 +73,7 @@ message Person{
 	string FirstName = 2;
 	string LastName = 3;
 	DietaryRequirements DietaryRequirements = 4;
+	RsvpStatus rsvpStatus = 5;
 }
 
 enum DietaryRequirements{

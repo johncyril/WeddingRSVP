@@ -1,0 +1,29 @@
+﻿@*https://stackoverflow.com/questions/62701307/blazor-select-like-component-does-not-update-value-in-data-source *@
+@typeparam T
+<select @bind="Value">
+    @foreach (var element in Enum.GetValues(typeof(@T)))
+    {
+        <option value="@element">@element</option>
+    }
+</select>
+
+@code {
+    private T _value = default(T)!;
+
+    [Parameter]
+    public T Value
+    {
+        get => _value;
+        set
+        {
+            if (_value.Equals(value))
+                return;
+
+            _value = value;
+            ValueChanged.InvokeAsync(_value);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
+}

@@ -1,6 +1,8 @@
-﻿namespace WeddingRsvp.Api.Data
+﻿using WeddingRsvp.Protos;
+
+namespace WeddingRsvp.Data
 {
-    public class Person
+    public class PersonViewModel
     {
         public int Id { get; set; }
 
@@ -11,5 +13,6 @@
         public DietaryRequirements DietaryRequirements { get; set; }
 
         public RsvpStatus RsvpStatus { get; set; }
+
     }
 }

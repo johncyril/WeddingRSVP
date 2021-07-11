@@ -13,7 +13,8 @@ namespace WeddingRsvp.Api.Extensions
             {
                 DietaryRequirements = (Data.DietaryRequirements)personDto.DietaryRequirements,
                 FirstName = personDto.FirstName,
-                LastName = personDto.LastName
+                LastName = personDto.LastName,
+                RsvpStatus = (Data.RsvpStatus)personDto.RsvpStatus
             };
         }
 
@@ -23,7 +24,8 @@ namespace WeddingRsvp.Api.Extensions
             {
                 DietaryRequirements = (Protos.DietaryRequirements)personDbObject.DietaryRequirements,
                 FirstName = personDbObject.FirstName,
-                LastName = personDbObject.LastName
+                LastName = personDbObject.LastName,
+                RsvpStatus = (Protos.RsvpStatus)personDbObject.RsvpStatus
             };
         }
     }

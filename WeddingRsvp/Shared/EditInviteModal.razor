@@ -1,0 +1,146 @@
+﻿@inject InviteManagementService Service
+@using WeddingRsvp.Data
+<h3>@title</h3>
+
+
+<EditForm Model="invite" OnValidSubmit="HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <label>
+        Party Name
+        <InputText @bind-Value="invite.PartyName" class="form-control" />
+    </label>
+
+    <label for="numberOfPeople">
+        No. of People
+        <InputNumber id="numberOfPeople" @bind-Value="invite.NumberOfPeople" class="form-control" />
+    </label>
+
+    <label for="email">
+        Email
+        <InputText id="email" @bind-Value="invite.Email" class="form-control" />
+    </label>
+    <label for="partyRsvp">
+        Party RSVP Status
+        <EnumSelector T="Protos.RsvpStatus" @bind-Value="invite.RsvpStatus" />
+    </label>
+    <br />
+    <h4>People in party</h4>
+    @foreach (var person in invite.People)
+    {
+        <label>
+            First Name
+            <InputText @bind-Value="person.FirstName" />
+        </label>
+        <label>
+            Last Name
+            <InputText @bind-Value="person.LastName" />
+        </label>
+        <label>
+            Dietary Requirements
+            <EnumSelector T="Protos.DietaryRequirements" @bind-Value="person.DietaryRequirements" />
+        </label>
+        <label>
+            Person RSVP status
+            <EnumSelector T="Protos.RsvpStatus" @bind-Value="person.RsvpStatus" />
+        </label>
+        <br />
+    }
+    @if (invite.People?.Count < invite.NumberOfPeople)
+    {
+        var person = new PersonViewModel();
+        <h5>Party size allows more people to be added </h5>
+        <label>
+            First Name
+            <InputText @bind-Value="person.FirstName" />
+        </label>
+        <label>
+            Last Name
+            <InputText @bind-Value="person.LastName" />
+        </label>
+        <label>
+            Dietary Requirements
+            <EnumSelector T="Protos.DietaryRequirements" @bind-Value="person.DietaryRequirements" />
+        </label>
+        <label>
+            Person RSVP status
+            <EnumSelector T="Protos.RsvpStatus" @bind-Value="person.RsvpStatus" />
+        </label>
+        <br />
+        <button @onclick="() => AddPersonToParty(person)">Add a person</button>
+    }
+
+    <br />
+
+    <button type="Submit" class="btn btn-primary">OK</button>
+    <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+    <ValidationSummary />
+</EditForm>
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter] public InviteViewModel invite { get; set; }
+
+    string title { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (invite.Id == default)
+        {
+            title = "Add a new Invite";
+        }
+
+        else
+        {
+            invite = invite;
+            title = "Edit an Invite";
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (invite.Id == default)
+        {
+            var inviteCode = await Service.AddInvite(invite);
+            if (!string.IsNullOrEmpty(inviteCode))
+            {
+                await ModalInstance.CloseAsync(ModalResult.Ok($"Invite Added successfully"));
+            }
+            else
+            {
+                await ModalInstance.CloseAsync(ModalResult.Cancel());
+            }
+        }
+        else
+        {
+            var code = await Service.UpdateInvite(invite);
+            if (!string.IsNullOrEmpty(code))
+            {
+                await ModalInstance.CloseAsync(ModalResult.Ok($"Invite Updated successfully"));
+            }
+            else
+            {
+                await ModalInstance.CloseAsync(ModalResult.Cancel());
+            }
+        }
+    }
+
+    private async Task Cancel()
+    {
+        await ModalInstance.CancelAsync();
+    }
+
+    private void AddPersonToParty(PersonViewModel person)
+    {
+        if (invite.People == null)
+        {
+            invite.People = new List<PersonViewModel>();
+        }
+
+        invite.People.Add(person);
+    }
+
+}
+
